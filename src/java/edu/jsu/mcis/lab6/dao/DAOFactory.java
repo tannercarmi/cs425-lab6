@@ -46,5 +46,13 @@ public class DAOFactory {
     public RegistrationDAO getRegistrationDAO() {
         return new RegistrationDAO(this);
     }
+    
+    public SessionDAO getSessionDAO() {
+        return new SessionDAO(this);
+    }
+    
+    public AttendeeDAO getAttendeeDAO() {
+        return new AttendeeDAO(this);
+    }
 
 }
