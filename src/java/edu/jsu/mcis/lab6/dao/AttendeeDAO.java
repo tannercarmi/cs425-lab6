@@ -21,13 +21,12 @@ public class AttendeeDAO {
     
     private final String QUERY_SELECT_BY_ID = "SELECT * FROM "
             + "attendee WHERE id = ?";
-    
     private final String QUERY_CREATE = "INSERT INTO attendee (firstname, lastname, displayname) VALUES (?,?,?)";
-    
-    
     private final String QUERY_UPDATE = "UPDATE attendee SET firstname = ?, lastname = ?, displayname = ? WHERE id = ?";
-    
     private final String QUERY_REGISTRATION_NUMBER = "SELECT CONCAT(\"R\", LPAD(attendeeid, 6, 0)) AS num FROM registration WHERE attendeeid = ?";
+    private final String QUERY_SELECT_ALL = "SELECT * FROM attendee";
+    private final String QUERY_SELECT_NAME = "SELECT * FROM attendee a WHERE firstname = ? AND lastname = ? ";
+    
     
     AttendeeDAO(DAOFactory dao) {
         this.daoFactory = dao;
@@ -97,6 +96,67 @@ public class AttendeeDAO {
 
         json.put("registrationnumber", getRegistrationNum(attendeeid));
         return JSONValue.toJSONString(json);
+
+    }
+    
+    public int findID(String firstname, String lastname) {
+        int result = 0;
+
+        Connection conn = daoFactory.getConnection();
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try {
+
+                ps = conn.prepareStatement(QUERY_SELECT_NAME);
+                ps.setString(1, firstname);
+                ps.setString(2, lastname);
+
+                boolean hasresults = ps.execute();
+
+                if (hasresults) {
+
+                        rs = ps.getResultSet();
+
+                        if (rs.next()) {
+
+                                result = Integer.parseInt(rs.getString("id"));
+
+                        }
+
+                }
+
+            } catch (Exception e) {
+                    e.printStackTrace();
+            } finally {
+
+                if (rs != null) {
+                        try {
+                                rs.close();
+                                rs = null;
+                        } catch (Exception e) {
+                                e.printStackTrace();
+                        }
+                }
+                if (ps != null) {
+                        try {
+                                ps.close();
+                                ps = null;
+                } catch (Exception e) {
+                        e.printStackTrace();
+                }
+                }
+                if (conn != null) {
+                    try {
+                            conn.close();
+                            conn = null;
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                }
+            }
+                
+        return result;
 
     }
     
@@ -258,5 +318,79 @@ public class AttendeeDAO {
                 }
                 return result;
         }
+    
+        public String getAttendeesAsHTML() {
+
+        StringBuilder html = new StringBuilder();
+
+        Connection conn = daoFactory.getConnection();
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try {
+
+            ps = conn.prepareStatement(QUERY_SELECT_ALL);
+
+            boolean hasresults = ps.execute();
+
+            if (hasresults) {
+
+                rs = ps.getResultSet();
+
+                html.append("<select name=\"attendeemenu\" id=\"attendeemenu\">");
+
+                while (rs.next()) {
+
+                    int id = rs.getInt("id");
+                    String firstname = rs.getString("firstname");
+                    String lastname = rs.getString("lastname");
+                    String displayname = rs.getString("displayname");
+
+                    html.append("<option value=\"").append(id).append("\">");
+                    html.append("Name: ").append(firstname);
+                    html.append(" ").append(lastname);
+                    html.append(", Displayname: ").append(displayname);
+                    html.append("</option>");
+
+                }
+
+                html.append("</select>");
+
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+
+            if (rs != null) {
+                try {
+                    rs.close();
+                    rs = null;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            if (ps != null) {
+                try {
+                    ps.close();
+                    ps = null;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            if (conn != null) {
+                try {
+                    conn.close();
+                    conn = null;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+        }
+
+        return html.toString();
+
+    }
     
 }

@@ -150,7 +150,10 @@ public class RegistrationDAO {
         PreparedStatement ps = null;
         ResultSet rs = null;
 
-        try {
+        String delete = this.delete(oldAttendeeID, oldSessionID);
+        String create = this.create(updatedSessionID, updatedAttendeeID);
+        
+        /*try {
             Connection conn = daoFactory.getConnection();
     
             ps = conn.prepareStatement(QUERY_UPDATE);
@@ -192,8 +195,8 @@ public class RegistrationDAO {
                 }
             }
 
-        }
-        return JSONValue.toJSONString(json);
+        }*/
+        return delete + create;
     }
     
     public String delete(int attendeeid, int sessionid) {

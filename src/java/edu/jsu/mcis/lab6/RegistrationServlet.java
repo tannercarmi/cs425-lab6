@@ -70,12 +70,55 @@ public class RegistrationServlet extends HttpServlet {
         
         try ( PrintWriter out = response.getWriter()) {
             
-            int sessionid = Integer.parseInt(request.getParameter("sessionid"));
-            int attendeeid = Integer.parseInt(request.getParameter("attendeeid"));
-            
+            AttendeeDAO attendeeDAO = daoFactory.getAttendeeDAO();
+
             RegistrationDAO dao = daoFactory.getRegistrationDAO();
-            
-            out.println(dao.create(sessionid, attendeeid));
+
+            // check if id parameter
+            if (request.getParameterMap().containsKey("sessionid") && request.getParameterMap().containsKey("sessionid")) {
+
+                int sessionid = Integer.parseInt(request.getParameter("sessionid"));
+                int attendeeid = Integer.parseInt(request.getParameter("attendeeid"));
+                out.println(dao.create(sessionid, attendeeid));
+                
+            } else if (request.getParameterMap().containsKey("firstname") && request.getParameterMap().containsKey("lastname") && request.getParameterMap().containsKey("displayname")) {
+
+                // get parameters
+                int sessionid = Integer.parseInt(request.getParameter("sessionmenu"));
+                String firstname = request.getParameter("firstname");
+                String lastname = request.getParameter("lastname");
+                String displayname = request.getParameter("displayname");
+
+                // get attendee id if attendee is not a new attendee
+                if (attendeeDAO.findID(firstname, lastname) != 0) {
+
+                    int attendeeid = attendeeDAO.findID(firstname, lastname);
+
+                    // call create fuction
+                    System.err.println("attendee id=" + attendeeid);
+                    out.println(dao.create(sessionid, attendeeid));
+                    response.sendRedirect("Registration.jsp");
+                }
+                // create a new attendee
+                else {
+                    // create new attendee
+                    attendeeDAO.create(firstname, lastname, displayname);
+
+                    // getid
+                    int attendeeid = attendeeDAO.findID(firstname, lastname);
+                    // make registration
+                    out.println(dao.create(sessionid, attendeeid));
+                    // redirect
+                    response.sendRedirect("Registration.jsp");
+                }
+
+            } else {
+
+                Exception notvalidException = new Exception("Args not valid");
+                throw notvalidException;
+
+            }
+            response.sendRedirect("Registration.jsp");
         
         }
         
@@ -104,8 +147,8 @@ public class RegistrationServlet extends HttpServlet {
                 parameters.put(pair[0], pair[1]);
             }
             
-            int oldSessionID = Integer.parseInt(parameters.get("sessionid"));
-            int oldAttendeeID = Integer.parseInt(parameters.get("attendeeid"));
+            int oldSessionID = Integer.parseInt(parameters.get("oldSessionID"));
+            int oldAttendeeID = Integer.parseInt(parameters.get("oldAttendeeID"));
             int updatedSessionID = Integer.parseInt(parameters.get("updatedSessionID"));
             int updatedAttendeeID = Integer.parseInt(parameters.get("updatedAttendeeID"));
             

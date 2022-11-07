@@ -165,4 +165,74 @@ public class SessionDAO {
 
         return JSONValue.toJSONString(json);
     }
+    
+    public String getSessionsAsHTML() {
+
+        StringBuilder html = new StringBuilder();
+
+        Connection conn = daoFactory.getConnection();
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try {
+
+            ps = conn.prepareStatement(QUERY_SELECT_ALL);
+
+            boolean hasresults = ps.execute();
+
+            if (hasresults) {
+
+                rs = ps.getResultSet();
+
+                html.append("<select name=\"sessionmenu\" id=\"sessionmenu\">");
+
+                while (rs.next()) {
+
+                    int id = rs.getInt("id");
+                    String description = rs.getString("description");
+
+                    html.append("<option value=\"").append(id).append("\">");
+                    html.append(description);
+                    html.append("</option>");
+                
+                }
+
+                html.append("</select>");
+
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+
+            if (rs != null) {
+                try {
+                    rs.close();
+                    rs = null;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            if (ps != null) {
+                try {
+                    ps.close();
+                    ps = null;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            if (conn != null) {
+                try {
+                    conn.close();
+                    conn = null;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+        }
+
+        return html.toString();
+
+    }
 }
