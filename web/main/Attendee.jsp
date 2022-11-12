@@ -28,8 +28,8 @@
     
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <script type="text/javascript" src="jquery-3.6.1.min.js"></script>
-        <script src="Lab6.js"></script>
+        <script type="text/javascript" src="scripts/jquery-3.6.1.min.js"></script>
+        <script src="scripts/Lab6.js"></script>
         <title>Attendee Page</title>
     </head>
     
@@ -58,7 +58,7 @@
         </div>
                         
         <div>
-            <a href="index.html">Home Page</a>
+            <a href="index.jsp">Home Page</a>
         </div>
                         
         <div id="output" name="output"></div>

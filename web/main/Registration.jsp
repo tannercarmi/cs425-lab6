@@ -1,6 +1,6 @@
 <%-- 
     Document   : Registration
-    Created on : Nov 3, 2022, 3:39:40 PM
+    Created on : Nov 4, 2022, 2:26:54 AM
     Author     : tanto
 --%>
 
@@ -25,40 +25,38 @@
 
 <!DOCTYPE html>
 <html>
+    
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Registration Page</title>
-        <script type="text/javascript" src="jquery-3.6.0.min.js"></script>
-        <script src="Lab6.js"></script>
     </head>
+    
     <body>
         <div>
             <form action="registrations" method="POST">
                 <fieldset>
                     <legend>Session Registration Form</legend>
 
-                    <label for=firstname> First Name </label>
+                    <label for=firstname> First Name: </label>
                     <input type="text" id="firstname" name="firstname">
 
-                    <label for=lastname>Last Name</label>
+                    <label for=lastname>Last Name: </label>
                     <input type="text" id="lastname" name="lastname">
 
-                    <label for=displayname>Display Name</label>
+                    <label for=displayname>Display Name: </label>
                     <input type="text" id="displayname" name="displayname">
 
-                        <p>Session ID 
-                            <div id="output"></div>
+                        <p>Session: 
+                            <%= sessionDAO.getSessionsAsHTML() %>
                         </p>
 
-                    <input type="submit" value="submit">
+                    <input type="submit" value="Register for Session">
                 </fieldset>
             </form>
-        </div>       
-        <div>
-            <a href="index.html">Home Page</a>
         </div>
-        <script type="text/javascript">
-            Lab6.showSessions();
-        </script>
+        <div>
+            <a href="index.jsp">Home Page</a>
+        </div>
     </body>
+    
 </html>

@@ -29,8 +29,8 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Session Page</title>
-        <script type="text/javascript" src="jquery-3.6.1.min.js"></script>
-        <script src="Lab6.js"></script>
+        <script type="text/javascript" src="scripts/jquery-3.6.1.min.js"></script>
+        <script src="scripts/Lab6.js"></script>
     </head>
     
     <body>
@@ -92,7 +92,7 @@
         </p>
                     
         <div>
-            <a href="index.html">Home Page</a>
+            <a href="index.jsp">Home Page</a>
         </div>
                     
     </body>
